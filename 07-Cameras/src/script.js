@@ -1,5 +1,28 @@
 import './style.css'
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+console.log(OrbitControls);
+
+// Sizes
+const sizes = {
+    width: 800,
+    height: 600
+}
+
+
+/**
+ * Cursor
+ */
+const cursor = {
+    x: 0,
+    y: 0
+}
+window.addEventListener('mousemove', (event) => {
+    //console.log(event.clientX, event.clientY)
+    cursor.x = event.clientX / sizes.width - 0.5;
+    cursor.y = -(event.clientY / sizes.height - 0.5);
+    //console.log(cursor.x, cursor.y);
+});
 
 /**
  * Base
@@ -7,11 +30,6 @@ import * as THREE from 'three'
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
-// Sizes
-const sizes = {
-    width: 800,
-    height: 600
-}
 
 // Scene
 const scene = new THREE.Scene()
@@ -23,14 +41,42 @@ const mesh = new THREE.Mesh(
 )
 scene.add(mesh)
 
-// Camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+
+
+/**
+ * Cameras
+ */
+
+// Perspective Camera
+// 75: FOV(degrees)  
+// Aspect Ratio 1.333: 4:3 or 1.777: 16:9 
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100); // 0.1: near plane, 100: far plane
+
+/* 
+// Aspect Ratio 
+const aspectRatio = sizes.width / sizes.height
+// Orthographic Camera
+// 1.5: left, 1.5: right, 1.5: top, -1.5: bottom
+const camera = new THREE.OrthographicCamera(
+    -1.5 * aspectRatio,
+    1.5 * aspectRatio,
+    1.5, 
+    -1.5, 
+    0.1, 
+    100); // 0.1: near plane, 100: far plane
+
+   */  
 camera.position.x = 2
 camera.position.y = 2
 camera.position.z = 2
 camera.lookAt(mesh.position)
 scene.add(camera)
 
+// Controls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+/* controls.target.y = 1;
+controls.update(); */
 // Renderer
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
@@ -45,7 +91,22 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-    mesh.rotation.y = elapsedTime;
+    //mesh.rotation.y = elapsedTime;
+
+    // Update Camera
+    //camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
+    //camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3;
+    /* camera.position.y = cursor.y * 3;
+    camera.position.x = cursor.x * 3; */
+    // Update camera
+    /* camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 2
+    camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 2
+    camera.position.y = cursor.y * 3
+    camera.lookAt(mesh.position) */
+
+    // Update controls
+    controls.update();
+
 
     // Render
     renderer.render(scene, camera)
