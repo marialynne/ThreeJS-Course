@@ -2,7 +2,13 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui'
-import CANNON from 'cannon'
+import * as CANNON from 'cannon-es' // CannonJS physics engine for 3D in JavaScript remplace cannon.js
+// Ammo.js is a port of the Bullet physics engine to JavaScript. 
+// It is a port of the C++ code to JavaScript using Emscripten. 
+
+// physijs is a JavaScript library that provides a thin wrapper around the three.js library.
+// It adds support for physics to three.js. It uses the Ammo.js library for physics calculations.
+
 
 /**
  * Debug
